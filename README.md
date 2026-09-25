@@ -1,4 +1,3 @@
-# CORE
 # ROVERA v2.6 | Autonomous Multi-Agent Robot Fleet Coordination Platform
 ### HackFusion 2026 • IEEE Robotics & Automation Society (RAS)
 
@@ -66,6 +65,40 @@
 
 ---
 
+## 🏗️ System Architecture
+
+```mermaid
+graph TD
+    subgraph Operational Environment
+        T[Task Objectives Queue] --> MATA[Multi-Agent Task Allocation]
+        Z[Danger & Blocked Zones] --> CBS[Conflict-Based Search Engine]
+    end
+
+    subgraph Autonomous Fleet Coordination
+        MATA -->|Task Specs| CNP[P2P Contract Net Protocol]
+        CNP -->|Bids & Coalitions| ROBOTS[Heterogeneous Robot Fleet]
+        ROBOTS -->|Planned Paths| CBS
+        CBS -->|Spatial-Temporal Intersections| ROW[Right-of-Way Resolver]
+        ROW -->|Detour Trajectories| ROBOTS
+        ROBOTS -->|Corridor Dependencies| WFG[Wait-For Graph & Deadlock Engine]
+        WFG -->|Lateral Escape Maneuvers| ROBOTS
+    end
+
+    subgraph Energy & Network Infrastructure
+        ROBOTS -->|SOC Monitoring| RTB[Battery-Aware RTB Scheduler]
+        RTB -->|Queuing & Docking| PADS[Charging Stations Alpha, Beta, Gamma]
+        ROBOTS <-->|RF Ad-Hoc Links| MESH[P2P Gossip Mesh Network]
+        MESH -->|Packet Loss & Jitter| SIM[Network Degradation Simulator]
+    end
+
+    subgraph High-Scale Swarm Engine
+        ROBOTS -->|2D Coordinates| GRID[Spatial Hashing Grid O(N)]
+        GRID -->|Neighborhood Lookups| SWARM[500+ Swarm Physics & Canvas]
+    end
+```
+
+---
+
 ## 💻 Tech Stack
 
 - **Frontend & UI:** React 18, TypeScript, Tailwind CSS, Lucide Icons, HTML5 Canvas 2D
@@ -108,6 +141,26 @@ Open your browser at `http://localhost:5173`.
 npm run build
 ```
 Optimized static assets will be output to `dist/`.
+
+---
+
+## 🧪 Demonstration Guide for Evaluators & Jury
+
+1. **Mission Control (`/`):**
+   - Click **"Run Demo"** to initiate autonomous task discovery, bidding, and execution.
+   - Toggle **Mesh**, **Conflicts**, **Chargers**, and **Deadlocks** layer overlays in the tactical grid header.
+2. **Conflicts & Deadlocks Tab:**
+   - Observe real-time predicted trajectory intersections and Right-of-Way assignments.
+   - Click **"Inject Head-On Deadlock"** and observe how the Wait-For Graph cycle is automatically broken via lateral escape maneuvers.
+3. **Battery & RTB Tab:**
+   - Inspect the **Energy Feasibility Audit** table showing transit, execution, RTB energy, and 15% safety margins.
+   - Click **"Send RTB"** on any robot to observe automated docking and recharge at Stations Alpha, Beta, or Gamma.
+4. **Faults & Mesh Resilience Tab:**
+   - Click **"Kill Central Controller"** to simulate total central node failure. Notice that the system switches to **P2P GOSSIP MESH** and mission execution continues without interruption.
+   - Inject motor failures, battery drops, or comms jamming and witness real-time peer task handover.
+5. **500+ Swarm Benchmarks Tab:**
+   - Click **"Swarm (500+ Robots)"** to scale simulation to over 500 active agents.
+   - Review the live telemetry gauges: 60 FPS, &lt;2 ms tick latency, and thousands of pairwise collision checks eliminated via spatial hashing.
 
 ---
 
